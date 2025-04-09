@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Busters</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: hotpink;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    #title {
+        font-size: 4rem;
+    }
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+    }
+    img {
+      max-width: 80%;
+      height: auto;
+      border: 5px dashed yellow;
+      border-radius: 20px;
+      margin: 20px 0;
+    }
+    input[type="text"] {
+      font-size: 1.9rem;
+      padding: 10px;
+      border: 4px dotted purple;
+      border-radius: 10px;
+      background: yellow;
+      color: hotpink;
+      width: 150px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 1.5rem;
+      border-radius: 10px;
+      background-color: purple;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkmagenta;
+    }
+  </style>
+</head>
+<body>
+  <div id="screens"></div>
+
+  <script>
+    const screensData = [
+      { image: "https://www.chicago.gov/content/dam/city/depts/cdot/pedestrian/PressRelease/2023-12-04_Central%20Park_Press%20Event%20(30).jpg", text: "What are the first four letters of the surname of the person who officially opened S Block?", code: 'Rand' },
+      { image: "images/ymoffice.jpg", text: "Standing at the Senior Year Manager's office door, looking from left to right, what building letters can be seen?", code: 'JK' },
+      { image: "https://perthisok.com/thumbnails/cG9zdDoxNTQ5OTc=.jpeg", text: "What degree Latitude is Perth closest to? Include number and letter. EG: '90N'", code: '32S' },
+      { image: "https://i.ytimg.com/vi/UJ4XjWvTjNg/sddefault.jpg", text: "Three people from your team must perform 10 push ups each for a PE teacher and they will give you a code.", code: '10PU' },
+      { image: "https://images.stockcake.com/public/7/9/8/798569c5-f1d9-4798-84e8-7928568fea49_large/serene-water-droplets-stockcake.jpg", text: "What did Jesus do in John 11:35?", code: 'wept' },
+      { image: "https://neography.info/wp-content/uploads/2022/09/print-vs-sans-2.png?w=1024", text: "Find a languages teacher and say 'hello' in 5 different languages other than English.", code: 'Lang' },
+      { image: "https://www.sciencealert.com/images/2021-02/processed/chemistry_einsteinium_wiki_1024.jpg", text: "What is the atomic weight of Einsteinium?", code: '252' },
+      { image: "https://live-production.wcms.abc-cdn.net.au/f07d3ede8a273f7325edeeb92a08a9d9?impolicy=wcms_crop_resize&cropH=694&cropW=1042&xPos=458&yPos=64&width=862&height=575", text: "In what year was the Battle of Long Tan fought during the Vietnam War?", code: '1966' },
+      { image: "https://www.pluggedin.com/wp-content/uploads/2019/12/a-beautiful-mind-1024x575.jpg", text: "If 'a' = 1, and 'b' = 2, and 'ab' = 3, and 'carey' = 52...what is the season of birth?", code: '66' },
+      { image: "https://thx2.sfo2.cdn.digitaloceanspaces.com/detail_meaning/%EC%9E%AC%EB%AF%B8_1.webp", text: "Translate this Korean word into English.", code: 'fun' }
+    ];
+
+    const screensContainer = document.getElementById('screens');
+
+    screensData.forEach((data, index) => {
+      const screen = document.createElement('div');
+      screen.className = 'screen';
+      if (index === 0) screen.classList.add('active');
+
+      screen.innerHTML = `
+      <h1 id="title">House Code Breaker Challenge</h1>
+      <h1>Question ${index + 1}</h1>
+        <img src="${data.image}" alt="Image ${index + 1}">
+        <h2>${data.text}</h2>
+        <input type="text" maxlength="4" placeholder="Enter code">
+        <br>
+        <button>BOOM!</button>
+      `;
+
+      screensContainer.appendChild(screen);
+    });
+
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach((screen, index) => {
+      const input = screen.querySelector('input');
+      const button = screen.querySelector('button');
+
+      // Focus input automatically when the screen becomes active
+      if (screen.classList.contains('active')) {
+        input.focus();
+      }
+
+      button.addEventListener('click', () => {
+        // Convert both the input and the correct code to lowercase for case-insensitive comparison
+        if (input.value.toLowerCase() === screensData[index].code.toLowerCase()) {
+          screen.classList.remove('active');
+          if (index + 1 < screens.length) {
+            screens[index + 1].classList.add('active');
+            screens[index + 1].querySelector('input').focus(); // Focus next input
+          } else {
+            // Create a final screen with the message
+            const finalScreen = document.createElement('div');
+            finalScreen.className = 'screen active';
+            finalScreen.innerHTML = `
+              <h1 id="title">You're nearly there!<br><br>The code for the locked box is Harrisdale's Postcode!<br><br>Go! Go! Go!</h1>
+              
+            `;
+            screensContainer.appendChild(finalScreen);
+          }
+        } else {
+          alert('Wrong code! Try again.');
+        }
+      });
+
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          button.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
